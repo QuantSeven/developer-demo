@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.pousheng.demo.dao.menu.Menu">
+	<resultMap id="MenuResultMap" type="com.pousheng.demo.model.menu.Menu">
+		<id property="menuId" column="MENU_ID" />
+		<result property="name" column="NAME" />
+		<result property="parentId" column="PARENT_ID" />
+		<result property="url" column="URL" />
+		<result property="icon" column="ICON" />
+		<result property="iconClass" column="ICON_CLASS" />
+		<result property="sort" column="SORT" />
+		<result property="createDate" column="CREATE_DATE" />
+		<result property="createUser" column="CREATE_USER" />
+		<result property="visable" column="VISABLE" />
+		<result property="lever" column="LEVER" />
+	</resultMap>
+	<!-- 定义可重用的SQL代码段，可以包含在其他语句中 -->
+	<sql id="base_column">
+		MENU_ID,NAME,PARENT_ID,URL,ICON,ICON_CLASS,SORT,CREATE_DATE,CREATE_USER,VISABLE,LEVER
+	</sql>
+
+	<select id="findByParentId" resultMap="MenuResultMap" parameterType="java.lang.Integer">
+		SELECT
+		<include refid="base_column" />
+		FROM COM_MENU WHERE PARENT_ID=#{parentId,jdbcType=INTEGER} AND VISABLE='1'
+	</select>
+	
+	<select id="selectMenus" resultMap="MenuResultMap">
+		SELECT
+		<include refid="base_column" />
+		FROM COM_MENU WHERE VISABLE='1'
+	</select>
+	<select id="selectByPage" resultMap="MenuResultMap">
+		SELECT
+		<include refid="base_column" />
+		FROM COM_MENU 
+	</select>
+</mapper> 

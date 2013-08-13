@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.pousheng.demo.dao.user.UserDao">
+	<resultMap id="UserResultMap" type="com.pousheng.demo.model.user.User">
+		<id property="userId" column="USER_ID" />
+		<result property="userName" column="USER_NAME" />
+		<result property="password" column="PASSWORD" />
+		<result property="email" column="EMAIL" />
+		<result property="phone" column="PHONE" />
+		<result property="address" column="ADDRESS" />
+		<result property="status" column="STATUS" />
+		<result property="description" column="DESCRIPTION" />
+	</resultMap>
+	<!-- 定义可重用的SQL代码段，可以包含在其他语句中 -->
+	<sql id="base_column">
+		USER_ID,USER_NAME,PASSWORD,EMAIL,PHONE,ADDRESS,STATUS,DESCRIPTION
+	</sql>
+
+	<select id="selectByPk" resultMap="UserResultMap" parameterType="String">
+		SELECT
+		<include refid="base_column" />
+		FROM T_USER WHERE USER_ID=#{userId,jdbcType=VARCHAR}
+	</select>
+	<select id="selectCount"  resultType="java.lang.Integer">
+		SELECT COUNT(0) FROM T_USER 
+	</select>
+
+	<select id="selectByPage" resultMap="UserResultMap">
+		SELECT
+		<include refid="base_column" />
+		FROM T_USER 
+		<where>
+			<if test="email != null and email != ''">
+				EMAIL = #{email}
+			</if>
+		</where>
+		${limitAfter} 
+	</select>
+	
+	<delete id="deleteByPk" parameterType="String">
+		DELETE FROM T_USER WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+	</delete>
+</mapper> 
