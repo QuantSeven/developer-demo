@@ -4,54 +4,53 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.pousheng.demo.web.ui.DataGrid;
+import framework.generic.mybatis.page.Pagination;
 import org.springframework.stereotype.Service;
 
 import com.pousheng.demo.dao.menu.MenuDao;
 import com.pousheng.demo.model.menu.Menu;
 
 @Service("menuService")
-public class MenuServiceImpl implements MenuService {
+ public class MenuServiceImpl implements MenuService {
 
 	private MenuDao menuDao;
 
-	/** 通过spring注入MenuDao */
 	@Resource
 	public void setMenuDao(MenuDao menuDao) {
 		this.menuDao = menuDao;
 	}
 
-	@Override
-	public Menu save(Menu menu) {
-		return menuDao.insert(menu);
-	}
 
-	@Override
-	public Menu update(Menu menu) {
-		return menuDao.update(menu);
-	}
+    @Override
+    public int deleteByPk(String id) {
+        return menuDao.deleteByPk(id);
+    }
 
-	@Override
-	public int delete(Menu menu) {
-		return 0;
-	}
+    @Override
+    public void update(Menu menu) {
+      menuDao.updateObject(menu);
+    }
 
-	@Override
-	public int deleteByPK(String menuid) {
-		return menuDao.deleteByPK(menuid);
-	}
+    @Override
+    public Menu findByPK(String menuId) {
+        return menuDao.findByPK(menuId);
+    }
 
-	@Override
-	public List<Menu> findAll() {
-		return menuDao.read();
-	}
+    @Override
+    public Menu insert(Menu menu) {
+         menuDao.insertObject(menu);
+         return menu;
+    }
 
-	@Override
-	public Menu findByPK(String menuid) {
-		return menuDao.findByPK(menuid);
-	}
+    @Override
+    public DataGrid getPage(Pagination pagination) {
+       	List < Menu > results = menuDao.findByPage(pagination);
+        return new DataGrid(menuDao.count(), results);
+    }
 
-	@Override
-	public List<Menu> findByParentId(String parentId) {
-		return menuDao.findByParentId(parentId);
-	}
+    @Override
+    public List<Menu> findAll() {
+        return menuDao.read();
+    }
 }

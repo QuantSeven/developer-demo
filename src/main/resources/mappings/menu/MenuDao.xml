@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace必须指向Dao接口 -->
-<mapper namespace="com.pousheng.demo.dao.menu.Menu">
+<mapper namespace="com.pousheng.demo.dao.menu.MenuDao">
 	<resultMap id="MenuResultMap" type="com.pousheng.demo.model.menu.Menu">
 		<id property="menuId" column="MENU_ID" />
 		<result property="name" column="NAME" />
@@ -21,20 +21,44 @@
 		MENU_ID,NAME,PARENT_ID,URL,ICON,ICON_CLASS,SORT,CREATE_DATE,CREATE_USER,VISABLE,LEVER
 	</sql>
 
+	<select id="findByPK" resultMap="MenuResultMap" parameterType="String">
+		SELECT
+		<include refid="base_column" />
+		FROM COM_MENU WHERE MENU_ID=#{menuId,jdbcType=VARCHAR}
+	</select>
+	<select id="count" resultType="java.lang.Integer">
+		SELECT COUNT(0) FROM COM_MENU
+	</select>
+
+	<select id="findByPage" resultMap="MenuResultMap">
+		SELECT
+		<include refid="base_column" />
+		FROM COM_MENU
+		<where>
+			<if test="parameter.name != null and parameter.name != ''">
+				NAME LIKE CONCAT('%',#{parameter.name},'%')
+			</if>
+			<if test="parameter.visable != null and parameter.visable !=''">
+				AND VISABLE = #{parameter.visable}
+			</if>
+		</where>
+		limit #{parameter.pageNo},#{parameter.pageSize}
+	</select>
+
 	<select id="findByParentId" resultMap="MenuResultMap" parameterType="java.lang.Integer">
 		SELECT
 		<include refid="base_column" />
 		FROM COM_MENU WHERE PARENT_ID=#{parentId,jdbcType=INTEGER} AND VISABLE='1'
 	</select>
-	
-	<select id="selectMenus" resultMap="MenuResultMap">
+
+	<select id="read" resultMap="MenuResultMap">
 		SELECT
 		<include refid="base_column" />
 		FROM COM_MENU WHERE VISABLE='1'
 	</select>
-	<select id="selectByPage" resultMap="MenuResultMap">
-		SELECT
-		<include refid="base_column" />
-		FROM COM_MENU 
-	</select>
+
+	<delete id="deleteByPK" parameterType="String">
+		DELETE FROM COM_MENU WHERE MENU_ID =
+		#{menuId,jdbcType=VARCHAR}
+	</delete>
 </mapper> 

@@ -18,25 +18,34 @@
 		USER_ID,USER_NAME,PASSWORD,EMAIL,PHONE,ADDRESS,STATUS,DESCRIPTION
 	</sql>
 
-	<select id="selectByPk" resultMap="UserResultMap" parameterType="String">
+	<select id="findByPK" resultMap="UserResultMap" parameterType="String">
 		SELECT
 		<include refid="base_column" />
 		FROM T_USER WHERE USER_ID=#{userId,jdbcType=VARCHAR}
 	</select>
-	<select id="selectCount"  resultType="java.lang.Integer">
+	<select id="count"  resultType="java.lang.Integer">
 		SELECT COUNT(0) FROM T_USER 
 	</select>
+	<select id="read"  resultMap="UserResultMap">
+		SELECT <include refid="base_column" /> FROM T_USER 
+	</select>
 
-	<select id="selectByPage" resultMap="UserResultMap">
+	<select id="findByPage" resultMap="UserResultMap">
 		SELECT
 		<include refid="base_column" />
 		FROM T_USER 
 		<where>
-			<if test="email != null and email != ''">
-				EMAIL = #{email}
+			<if test="parameter.email != null and parameter.email != ''">
+				EMAIL LIKE CONCAT('%',#{parameter.email},'%')
+			</if>
+			<if test="parameter.userName != null and parameter.userName != ''">
+				AND USER_NAME LIKE CONCAT('%',#{parameter.userName},'%')
 			</if>
 		</where>
-		${limitAfter} 
+		<if test="parameter.orderBy != null and parameter.orderBy != ''">
+			order By ${parameter.orderBy} ${parameter.order}
+		</if>
+		limit #{parameter.pageNo},#{parameter.pageSize} 
 	</select>
 	
 	<delete id="deleteByPk" parameterType="String">

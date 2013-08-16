@@ -2,28 +2,28 @@ package com.pousheng.demo.model.user;
 
 import framework.generic.mybatis.annotation.Column;
 import framework.generic.mybatis.annotation.Table;
-import framework.generic.mybatis.db.PersistentModel;
+import framework.generic.mybatis.model.PersistentModel;
 
-@Table(name="T_USER")
+@Table(name = "T_USER")
 public class User implements PersistentModel {
 
 	private static final long serialVersionUID = -9218985453073185112L;
 
-	@Column(name="USER_ID",pk=true)
+	@Column(name = "USER_ID", pk = true)
 	private String userId;
-	@Column(name="USER_NAME")
+	@Column(name = "USER_NAME", insertable = false)
 	private String userName;
-	@Column(name="PASSWORD")
+	@Column(name = "PASSWORD")
 	private String password;
-	@Column(name = "EMAIL")
+	@Column(name = "EMAIL", updatable = false)
 	private String email;
-	@Column(name="PHONE")
+	@Column(name = "PHONE")
 	private String phone;
-	@Column(name="ADDRESS")
+	@Column(name = "ADDRESS")
 	private String address;
-	@Column(name="STATUS")
+	@Column(name = "STATUS")
 	private Integer status;
-	@Column(name="DESCRIPTION")
+	@Column(name = "DESCRIPTION")
 	private String description;
 
 	public String getUserId() {

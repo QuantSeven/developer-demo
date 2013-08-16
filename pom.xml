@@ -8,7 +8,7 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
-		<mybatis-spring.version>1.1.1</mybatis-spring.version>
+		<mybatis-spring.version>1.2.0</mybatis-spring.version>
 		<mybatis.version>3.2.0</mybatis.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<hibernate-validator.version>4.3.0.Final</hibernate-validator.version>
@@ -46,15 +46,21 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<dependencies>
+		<!-- 底层框架-->
+		<dependency>
+			<groupId>framework.generic.mybatis</groupId>
+			<artifactId>framework-generic-mybatis</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>framework.generic</groupId>
+			<artifactId>framework-generic-extension</artifactId>
+			<version>1.2</version>
+		</dependency>
 		<dependency>
 			<groupId>framework.generic</groupId>
 			<artifactId>framework-generic-utils</artifactId>
 			<version>1.17</version>
-		</dependency>
-		<dependency>
-			<groupId>framework.generic</groupId>
-			<artifactId>framework-generic-web</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<!-- mybatis begin -->
 		<dependency>
@@ -62,7 +68,11 @@
 			<artifactId>mybatis</artifactId>
 			<version>${mybatis.version}</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.mybatis</groupId> <artifactId>mybatis-spring</artifactId> <version>${mybatis-spring.version}</version> </dependency> -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${mybatis-spring.version}</version>
+		</dependency>
 		<!-- mybatis end -->
 		<!-- AOP begin -->
 		<dependency>

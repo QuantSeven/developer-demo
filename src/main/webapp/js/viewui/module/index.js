@@ -4,7 +4,7 @@ define(function(require, exports, module){
     /**
      * 左侧菜单区域
      */
-    pousheng.ajaxData("menu/listData").done(function(data){
+    pousheng.ajaxData("menu/menuList").done(function(data){
         var setting = {
             id: "menuId",
             pId: "parentId"

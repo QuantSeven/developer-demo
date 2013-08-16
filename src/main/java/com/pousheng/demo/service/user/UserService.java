@@ -1,5 +1,7 @@
 package com.pousheng.demo.service.user;
 
+import java.util.List;
+
 import com.pousheng.demo.model.user.User;
 import com.pousheng.demo.web.ui.DataGrid;
 
@@ -16,5 +18,7 @@ public interface UserService {
 	int deleteByPk(String userId);
 
 	User findByPK(String userId);
+	
+	List<User> findAll();
 
 }

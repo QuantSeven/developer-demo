@@ -30,12 +30,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User insert(User user) {
-		return userDao.insert(user);
+		userDao.insertObject(user);
+		return user;
 	}
 
 	@Override
 	public User update(User user) {
-		return userDao.update(user);
+		userDao.updateObject(user);
+		return user;
 	}
 
 	@Override
@@ -46,5 +48,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findByPK(String userId) {
 		return userDao.findByPK(userId);
+	}
+
+	@Override
+	public List<User> findAll() {
+		return userDao.read();
 	}
 }

@@ -1,5 +1,6 @@
 package com.pousheng.demo.web.controller.user;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -41,14 +42,20 @@ public class UserController extends AbstractController {
 	public String index(HttpServletRequest request) {
 		return "user/user_list";
 	}
+	
 
 	@RequestMapping(value = "listData", method = { RequestMethod.POST, RequestMethod.GET })
 	@ResponseBody
 	public DataGrid listData(Pagination pagination, HttpServletRequest request) {
 		Map<String, Object> paramMap = WebUtils.getParametersStartingWith(request, "sch_");
-		pagination.setParamMap(paramMap);
+		pagination.setParameter(paramMap);
 		DataGrid dg = userService.getPage(pagination);
 		return dg;
+	}
+	@RequestMapping(value = "userList", method = { RequestMethod.POST, RequestMethod.GET })
+	@ResponseBody
+	public List<User> userList(HttpServletRequest request) {
+		return userService.findAll();
 	}
 
 	/*--------------------------------添加操作-----------------------------------*/
@@ -64,11 +71,11 @@ public class UserController extends AbstractController {
 		try {
 			if (!StringUtil.isNullOrEmpty(user)) {
 				user = userService.insert(user);
-				// LoggingUtil.info(CommonConstant.APP_ID, getEmployeeCode(), getIp(), "ADD_USER", getEmployeeName() + "(" + getEmployeeCode() + ")" + "添加了一条ID_为：(" + user.getId() + ")的数据记录:" + user);
+				//LoggingUtil.info(CommonConstant.APP_ID, getEmployeeCode(), getIp(), "ADD_USER", getEmployeeName() + "(" + getEmployeeCode() + ")" + "添加了一条ID_为：(" + user.getId() + ")的数据记录:" + user);
 			}
 			return success("user/index", getMessage("msg.success.add"));
 		} catch (Exception e) {
-			// ExceptionUtil.error(CommonConstant.APP_ID, e, this.getClass(), getEmployeeName() + "(" + getEmployeeCode() + ")" + "添加User为：(" + user + ")的时候报错.");
+			//ExceptionUtil.error(CommonConstant.APP_ID, e, this.getClass(), getEmployeeName() + "(" + getEmployeeCode() + ")" + "添加User为：(" + user + ")的时候报错.");
 			e.printStackTrace();
 			return error("user/index", getMessage("msg.error.add"));
 		}

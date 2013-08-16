@@ -133,7 +133,7 @@
 					<div class="right">
 						<div class="form-row">
 							<div class="input-prepend">
-								<span class="add-on"><i class="icon-user"></i></span><input type="text" id="username" name="username" placeholder="Username" value="qya" style="height:16px"/>
+								<span class="add-on"><i class="icon-user"></i></span><input type="text" id="username" name="username" placeholder="Username" value="yongan.quan" style="height:16px"/>
 							</div>
 						</div>
 						<div class="form-row">

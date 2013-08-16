@@ -11,35 +11,8 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
 	</context:component-scan>
 	
-	<!-- 数据类型转换器 -->
-	<!-- ①注册ConversionService -->
- 	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
- 	    <property name="converters">
- 	       <list>
-	 	        <bean id="stringToDateConverter" class="framework.generic.mvc.converter.StringToDateConverter">
-	 	            <constructor-arg value="yyyy-MM-dd"/>
-	 	        </bean>
-	 	         <bean id="StringToDateTimeConverter" class="framework.generic.mvc.converter.StringToDateTimeConverter">
-	 	            <constructor-arg value="yyyy-MM-dd HH:mm"/>
-	 	        </bean>
- 	        </list>
- 	    </property>
- 	</bean>
-	<!-- ②使用ConfigurableWebBindingInitializer注册conversionService -->
-	<bean id="webBindingInitializer" class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
-	    <property name="conversionService" ref="conversionService"/>
-	</bean>
- 	
 	<!--Spring3.1开始的注解 HandlerMapping -->
-	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
-		<property name="interceptors">
-            <list>
-                <bean class="org.springframework.web.servlet.handler.ConversionServiceExposingInterceptor">
-                    <constructor-arg ref="conversionService"/>
-                </bean>
-            </list>
-        </property>
-	</bean>
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
 		<property name="messageConverters">
 			<list>
@@ -67,15 +40,6 @@
 		</property>
 		<!--线程安全的访问session -->
 		<property name="synchronizeOnSession" value="true" />
-		<property name="customArgumentResolvers">
-			<list>
-				<!-- 自定义Json解析器 -->
-				<bean class="framework.generic.mvc.method.RequestJsonParamMethodArgumentResolver" />
-				<!-- 自定义表单对象解析器 -->
-				<bean class="framework.generic.mvc.method.FormModelMethodArgumentResolver" />
-			</list>
-		</property>
-		 <property name="webBindingInitializer" ref="webBindingInitializer"/>
 	</bean>
 
 	<!-- 定义JSP文件的位置 -->

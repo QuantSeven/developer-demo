@@ -221,6 +221,16 @@ define(function(require, exports, module) {
 	      seajs.use("module/common/validate");
 	});
 	
+	//初始化js 中使用到的国际化语言部分
+	$.extend(true,tipMsg,pousheng.getI18N('tip.messages'));
+
+	var i18n_common = pousheng.getI18N('common');
+
+	$.extend(true,btn,i18n_common.btn);
+	
+	$.extend(true,txt,i18n_common.txt);
+	var i18n_msg = pousheng.getI18N('msg');
+	$.extend(true,msg,i18n_msg);
 	
 	seajs.use("module/common/common");
       

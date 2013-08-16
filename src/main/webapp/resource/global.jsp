@@ -25,8 +25,6 @@
 	
    var  ui_config={};	
 	
-	var org ={};
-	
-	var advanced ={};
+	var common = {};
 
 </script>

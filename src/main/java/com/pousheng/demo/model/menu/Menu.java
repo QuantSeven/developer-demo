@@ -2,7 +2,7 @@ package com.pousheng.demo.model.menu;
 
 import framework.generic.mybatis.annotation.Column;
 import framework.generic.mybatis.annotation.Table;
-import framework.generic.mybatis.db.PersistentModel;
+import framework.generic.mybatis.model.PersistentModel;
 
 @Table(name = "COM_MENU")
 public class Menu implements PersistentModel {

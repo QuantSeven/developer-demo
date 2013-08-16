@@ -1,31 +1,23 @@
 package com.pousheng.demo.dao.user;
 
-import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 import com.pousheng.demo.model.user.User;
 
-import framework.generic.mybatis.page.Pagination;
+import framework.generic.mybatis.dao.GenericDao;
 
-public interface UserDao {
+public interface UserDao extends GenericDao<User, String> {
 
 	/**
 	 * 根据主键删除一条记录
 	 */
-	int deleteByPK(String userId);
+	int deleteByPK(@Param("userId") String userId);
 
 	/**
 	 * 根据主键查询一条记录
 	 */
-	User findByPK(String userId);
+	User findByPK(@Param("userId") String userId);
 
-	List<User> findByPage(Pagination pagination);
-
-	Integer count();
-
-	User insert(User user);
-
-	User update(User user);
-
-	int deleteByPk(String userId);
+	int deleteByPk(@Param("userId") String userId);
 
 }

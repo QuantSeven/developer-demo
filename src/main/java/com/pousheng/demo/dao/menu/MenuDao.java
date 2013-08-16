@@ -2,21 +2,18 @@ package com.pousheng.demo.dao.menu;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.pousheng.demo.model.menu.Menu;
 
-public interface MenuDao {
+import framework.generic.mybatis.dao.GenericDao;
 
-	int deleteByPK(String menuId);
+public interface MenuDao extends GenericDao<Menu, String> {
 
-	Menu findByPK(String menuId);
+	Menu findByPK(@Param("menuId") String menuId);
 
-	List<Menu> findByParentId(String parentId);
+	List<Menu> findByParentId(@Param("parentId") String parentId);
 
-	List<Menu> read();
+	int deleteByPk(@Param("menuId") String menuId);
 
-	Menu insert(Menu menu);
-
-	Menu update(Menu menu);
-
-	int deleteByPk(String menuId);
 }

@@ -3,21 +3,20 @@ package com.pousheng.demo.service.menu;
 import java.util.List;
 
 import com.pousheng.demo.model.menu.Menu;
+import com.pousheng.demo.web.ui.DataGrid;
+import framework.generic.mybatis.page.Pagination;
 
 public interface MenuService {
-	
-	Menu save(Menu menu);
-	
-	Menu update(Menu menu);
-	
-	int delete(Menu menu);
 
-	int deleteByPK(String menuId);
-	
-	List<Menu> findAll();
-	
+	int deleteByPk(String id);
+
+	void update(Menu menu);
+
 	Menu findByPK(String menuId);
 
-	List<Menu> findByParentId(String parentId);
-	
+	Menu insert(Menu menu);
+
+	DataGrid getPage(Pagination pagination);
+
+	List<Menu> findAll();
 }
