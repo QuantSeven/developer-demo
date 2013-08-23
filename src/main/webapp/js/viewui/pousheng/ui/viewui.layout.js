@@ -170,8 +170,7 @@
                         opts.left = panel.css('left');
                         opts.top = panel.css('top');
                         pp.panel('resize', opts);
-                        that._setSize(container);
-
+                        that._setSize(cc);
                     }
                 });
             }
@@ -205,7 +204,6 @@
         var panels = this.element.data(this.widgetName).panels;
         var that = this;
         var cc = this.element;
-
         function createExpandPanel(dir) {
             var icon;
             if (dir == 'east') icon = 'icon-arrow-left'
@@ -257,7 +255,7 @@
                         panels.east.panel('panel').animate({
                             left: cc.width() - panels.east.panel('getOptions').width
                         }, function () {
-                            that._setSize(container);
+                            that._setSize(cc);
                         });
                         return false;
                     });
@@ -302,7 +300,7 @@
                         panels.west.panel('panel').animate({
                             left: 0
                         }, function () {
-                            that._setSize(container);
+                            that._setSize(cc);
                         });
                         return false;
                     });
@@ -351,7 +349,7 @@
                         panels.north.panel('panel').stop(true, true);
                         panels.north.panel('open').panel('resize', { top: -panels.north.panel('getOptions').height });
                         panels.north.panel('panel').animate({ top: 0 }, function () {
-                            that._setSize(container);
+                            that._setSize(cc);
                         });
                         return false;
                     });
@@ -400,7 +398,7 @@
                         panels.south.panel('panel').stop(true, true);
                         panels.south.panel('open').panel('resize', { top: cc.height() });
                         panels.south.panel('panel').animate({ top: cc.height() - panels.south.panel('getOptions').height }, function () {
-                            that._setSize(container);
+                            that._setSize(cc);
                         });
                         return false;
                     });

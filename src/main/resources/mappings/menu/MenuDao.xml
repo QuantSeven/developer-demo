@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<!-- namespace必须指向Dao接口 -->
 <mapper namespace="com.pousheng.demo.dao.menu.MenuDao">
 	<resultMap id="MenuResultMap" type="com.pousheng.demo.model.menu.Menu">
 		<id property="menuId" column="MENU_ID" />
 		<result property="name" column="NAME" />
 		<result property="parentId" column="PARENT_ID" />
-		<result property="url" column="URL" />
+		<result property="href" column="HREF" />
 		<result property="icon" column="ICON" />
 		<result property="iconClass" column="ICON_CLASS" />
 		<result property="sort" column="SORT" />
@@ -16,18 +15,33 @@
 		<result property="visable" column="VISABLE" />
 		<result property="lever" column="LEVER" />
 	</resultMap>
-	<!-- 定义可重用的SQL代码段，可以包含在其他语句中 -->
 	<sql id="base_column">
-		MENU_ID,NAME,PARENT_ID,URL,ICON,ICON_CLASS,SORT,CREATE_DATE,CREATE_USER,VISABLE,LEVER
+		MENU_ID,NAME,PARENT_ID,HREF,ICON,ICON_CLASS,SORT,CREATE_DATE,CREATE_USER,VISABLE,LEVER
 	</sql>
-
-	<select id="findByPK" resultMap="MenuResultMap" parameterType="String">
+	<sql id="where_column">
+		<if test="menuId != null and menuId != ''">
+			AND MENU_ID=#{menuId,jdbcType=VARCHAR}
+		</if>
+		<if test="name != null and name != ''">
+			AND NAME LIKE CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="visable != null and visable !=''">
+			AND VISABLE = #{visable}
+		</if>
+		<if test="parentId != null and parentId != ''">
+			AND PARENT_ID=#{parentId,jdbcType=VARCHAR}
+		</if>
+	</sql>
+	<select id="findByPk" resultMap="MenuResultMap" parameterType="String">
 		SELECT
 		<include refid="base_column" />
 		FROM COM_MENU WHERE MENU_ID=#{menuId,jdbcType=VARCHAR}
 	</select>
 	<select id="count" resultType="java.lang.Integer">
 		SELECT COUNT(0) FROM COM_MENU
+		<where>
+			<include refid="where_column" />
+		</where>
 	</select>
 
 	<select id="findByPage" resultMap="MenuResultMap">
@@ -35,30 +49,27 @@
 		<include refid="base_column" />
 		FROM COM_MENU
 		<where>
-			<if test="parameter.name != null and parameter.name != ''">
-				NAME LIKE CONCAT('%',#{parameter.name},'%')
-			</if>
-			<if test="parameter.visable != null and parameter.visable !=''">
-				AND VISABLE = #{parameter.visable}
-			</if>
+			<include refid="where_column" />
 		</where>
-		limit #{parameter.pageNo},#{parameter.pageSize}
 	</select>
 
-	<select id="findByParentId" resultMap="MenuResultMap" parameterType="java.lang.Integer">
+	<select id="findPageByParentId" resultMap="MenuResultMap">
 		SELECT
 		<include refid="base_column" />
-		FROM COM_MENU WHERE PARENT_ID=#{parentId,jdbcType=INTEGER} AND VISABLE='1'
+		FROM COM_MENU
+		<where>
+			<include refid="where_column" />
+			OR MENU_ID=#{parentId,jdbcType=VARCHAR}
+		</where>
 	</select>
 
-	<select id="read" resultMap="MenuResultMap">
+	<select id="findAll" resultMap="MenuResultMap">
 		SELECT
 		<include refid="base_column" />
 		FROM COM_MENU WHERE VISABLE='1'
 	</select>
 
-	<delete id="deleteByPK" parameterType="String">
-		DELETE FROM COM_MENU WHERE MENU_ID =
-		#{menuId,jdbcType=VARCHAR}
+	<delete id="deleteByPk" parameterType="String">
+		DELETE FROM COM_MENU WHERE MENU_ID = #{menuId,jdbcType=VARCHAR}
 	</delete>
 </mapper> 

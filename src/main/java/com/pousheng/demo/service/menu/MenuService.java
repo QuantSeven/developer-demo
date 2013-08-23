@@ -4,19 +4,19 @@ import java.util.List;
 
 import com.pousheng.demo.model.menu.Menu;
 import com.pousheng.demo.web.ui.DataGrid;
-import framework.generic.mybatis.page.Pagination;
+import com.pousheng.demo.web.ui.PageRequest;
 
 public interface MenuService {
 
-	int deleteByPk(String id);
+	int remove(String menuId);
 
-	void update(Menu menu);
+	void modify(Menu menu);
 
-	Menu findByPK(String menuId);
+	Menu get(String menuId);
 
-	Menu insert(Menu menu);
+	Menu create(Menu menu);
 
-	DataGrid getPage(Pagination pagination);
+	List<Menu> read();
 
-	List<Menu> findAll();
+	DataGrid getDatagrid(PageRequest pageRequest);
 }

@@ -11,11 +11,11 @@ public class User implements PersistentModel {
 
 	@Column(name = "USER_ID", pk = true)
 	private String userId;
-	@Column(name = "USER_NAME", insertable = false)
+	@Column(name = "USER_NAME")
 	private String userName;
 	@Column(name = "PASSWORD")
 	private String password;
-	@Column(name = "EMAIL", updatable = false)
+	@Column(name = "EMAIL")
 	private String email;
 	@Column(name = "PHONE")
 	private String phone;

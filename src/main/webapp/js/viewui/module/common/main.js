@@ -218,6 +218,7 @@ define(function(require, exports, module) {
 		           });
 		        }
 		    });
+	      $.extend($.validator.messages,pousheng.getI18N('validator.messages'));
 	      seajs.use("module/common/validate");
 	});
 	

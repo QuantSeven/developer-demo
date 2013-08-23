@@ -7,15 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.pousheng.demo.web.controller.base.AbstractController;
-
 import framework.generic.utils.string.StringUtil;
 
 @Controller
-public class IndexController extends AbstractController {
+public class IndexController{
 
 	@RequestMapping(value = "index", method = { RequestMethod.GET, RequestMethod.POST })
-	public String getIndex(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String index(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if (StringUtil.isNullOrEmpty(request.getSession().getAttribute("username"))) {
 			return "redirect:loginForm";
 		}

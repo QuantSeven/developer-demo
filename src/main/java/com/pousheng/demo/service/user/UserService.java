@@ -4,21 +4,22 @@ import java.util.List;
 
 import com.pousheng.demo.model.user.User;
 import com.pousheng.demo.web.ui.DataGrid;
-
-import framework.generic.mybatis.page.Pagination;
+import com.pousheng.demo.web.ui.PageRequest;
 
 public interface UserService {
 
-	DataGrid getPage(Pagination pagination);
+	DataGrid getDatagrid(PageRequest pageRequest);
 
-	User insert(User user);
+	User create(User user);
 
-	User update(User user);
+	User modify(User user);
 
-	int deleteByPk(String userId);
+	int remove(String userId);
 
-	User findByPK(String userId);
+	User get(String userId);
 	
-	List<User> findAll();
+	List<User> read();
+
+	DataGrid getGroupUser(String groupId);
 
 }

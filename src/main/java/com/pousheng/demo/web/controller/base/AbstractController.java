@@ -1,189 +1,93 @@
 package com.pousheng.demo.web.controller.base;
 
-import java.util.Locale;
+import java.util.List;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
-import com.pousheng.demo.constant.MessageStatus;
+import com.pousheng.demo.web.ui.DataGrid;
 import com.pousheng.demo.web.ui.Json;
+import com.pousheng.demo.web.ui.PageRequest;
 
-import framework.generic.utils.ip.IpUtil;
-
-/**
- * 所有控制器的基类，提供了国际化的消息处理，ajax返回消息(如有需要可以在此基础上扩展所有公共的方法)
- * <p>
- * 项目名称：bpms
- * </p>
- * <p>
- * 版权：2013-广州扬基信息科技有限公司
- * </p>
- * 
- * @version 1.0, 2013-1-8 上午10:15:38
- * @author quanyongan
- */
 @Controller
-public class AbstractController {
+@RequestMapping(value = "abstract/*")
+public class AbstractController<T, PK> extends MessageController {
 
-	// 首先注入Spring容器中的ReloadableResourceBundleMessageSource资源文件读取类
-	@Resource
-	protected ReloadableResourceBundleMessageSource messageSource;
+	// 特别说明: 由于spring的方法参数映射太过于灵活,如果以下参数不适应你,请自己修改参数并修改代码生成器模板
+	// 如果你不喜欢 HttpServletRequest request,HttpServletResponse response作为方法参数，也请删除
 
-	@Resource
-	protected SessionLocaleResolver localeResolver;
-
-	protected Locale getLocale() {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-		return RequestContextUtils.getLocaleResolver(request).resolveLocale(request);
+	/** 进入dataGrid页面 */
+	@RequestMapping(value = "/index", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
+		throw new UnsupportedOperationException("not yet implement");
 	}
 
-	/**
-	 * 获取用户的IP
-	 */
-	public String getIp() {
-		return IpUtil.getClientRealIP(((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
+	/** dataGrid数据请求 */
+	@RequestMapping(value = "dataGrid", method = { RequestMethod.POST, RequestMethod.GET })
+	@ResponseBody
+	public DataGrid dataGrid(PageRequest pageRequest, HttpServletRequest request, HttpServletResponse response) {
+		throw new UnsupportedOperationException("not yet implement");
 	}
 
-	/**
-	 * 获取国际化文件的内容
-	 * 
-	 * @param code
-	 *            国际化文件的代码
-	 * @return 国际化的内容
-	 */
-	public String getMessage(String code) {
-		return messageSource.getMessage(code, null, getLocale());
+	/** 进入新增页面 */
+	@RequestMapping(value = "/addForm", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView addFrom(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		throw new UnsupportedOperationException("not yet implement");
 	}
 
-	/**
-	 * 获取国际化文件的内容
-	 * 
-	 * @param code
-	 *            国际化文件的代码
-	 * @param args
-	 *            参数
-	 * @return 国际化的内容
-	 */
-	public String getMessage(String code, Object[] args) {
-		return messageSource.getMessage(code, args, getLocale());
+	/** 保存新增 */
+	@RequestMapping(value = "/insert", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
+	public Json insert(@ModelAttribute("entity") T entity, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		throw new UnsupportedOperationException("not yet implement");
 	}
 
-	/**
-	 * 获取国际化文件的内容
-	 * 
-	 * @param code
-	 *            国际化文件的代码
-	 * @param args
-	 *            参数
-	 * @param defaultMessage
-	 *            默认的信息
-	 * @return 国际化的内容
-	 */
-	public String getMessage(String code, Object[] args, String defaultMessage) {
-		return messageSource.getMessage(code, args, defaultMessage, getLocale());
+	/** 进入编辑 页面 */
+	@RequestMapping(value = "/editForm", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView editForm(@RequestParam PK primaryKey, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		throw new UnsupportedOperationException("not yet implement");
 	}
 
-	/**
-	 * Ajax请求操作完成
-	 * 
-	 * @param statusCode
-	 *            状态代码
-	 * @param message
-	 *            信息
-	 * @return Json
-	 */
-	public Json done(Integer statusCode, String message) {
-		return new Json(message, statusCode);
+	/** 保存更新 */
+	@RequestMapping(value = "/update", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
+	public Json update(T entity, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		throw new UnsupportedOperationException("not yet implement");
 	}
 
-	/**
-	 * Ajax请求操作完成
-	 * 
-	 * @param forwardUrl
-	 *            跳转的URL
-	 * @param statusCode
-	 *            状态代码
-	 * @param message
-	 *            信息
-	 * @return Json
-	 */
-	public Json done(String forwardUrl, String message, Integer statusCode) {
-		return new Json(forwardUrl, message, statusCode);
+	/** 删除 */
+	@RequestMapping(value = "/delete", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
+	public Json delete(@RequestParam PK primaryKey, HttpServletRequest request, HttpServletResponse response) {
+		throw new UnsupportedOperationException("not yet implement");
 	}
 
-	/**
-	 * 成功消息
-	 * 
-	 * @param message
-	 *            信息
-	 * @return Json
-	 */
-	public Json success(String message) {
-		return done(MessageStatus.OK, message);
+	/** 批量删除 */
+	@RequestMapping(value = "batchDelete", method = { RequestMethod.GET, RequestMethod.POST })
+	@ResponseBody
+	public ModelAndView batchDelete(@RequestBody List<T> list, HttpServletRequest request, HttpServletResponse response) {
+		throw new UnsupportedOperationException("not yet implement");
 	}
 
-	/**
-	 * 成功消息
-	 * 
-	 * @param forwardUrl
-	 *            跳转的URL
-	 * @param message
-	 *            信息
-	 * @return Json
-	 */
-	public Json success(String forwardUrl, String message) {
-		return done(forwardUrl, message, MessageStatus.OK);
+	/** 查看 */
+	@RequestMapping(value = "/view", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView view(@RequestParam PK primaryKey, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		throw new UnsupportedOperationException("not yet implement");
 	}
 
-	/**
-	 * 错误消息
-	 * 
-	 * @param message
-	 *            信息
-	 * @return Json
-	 */
-	public Json error(String message) {
-		return done(MessageStatus.ERROR, message);
+	/** 验证主键是否已经存在 */
+	@RequestMapping(value = "validatePk", method = { RequestMethod.POST, RequestMethod.GET })
+	@ResponseBody
+	public boolean validatePk(@RequestParam PK primaryKey, HttpServletRequest request, HttpServletResponse response) {
+		throw new UnsupportedOperationException("not yet implement");
 	}
-	/**
-	 * 错误消息
-	 * 
-	 * @param forwardUrl
-	 *            跳转的URL
-	 * @param message
-	 *            信息
-	 * @return Json
-	 */
-	public Json error(String forwardUrl, String message) {
-		return done(forwardUrl, message, MessageStatus.ERROR);
-	}
-
-	/**
-	 * 
-	 * @Title: setLocale
-	 * @Description: 设置语言
-	 * @param request
-	 * @param response
-	 * @param languageCode
-	 */
-	protected void setLocale(HttpServletRequest request, HttpServletResponse response, String languageCode) {
-		String language = languageCode.substring(0, languageCode.indexOf("_"));
-		String country = languageCode.substring(languageCode.indexOf("_") + 1);
-		Locale newLocale = new Locale(language, country);
-		localeResolver.setLocale(request, response, newLocale);
-
-	}
-
-	public void setLocaleResolver(SessionLocaleResolver localeResolver) {
-		this.localeResolver = localeResolver;
-	}
-
 }

@@ -8,25 +8,36 @@
         <div class="pageFormContent form-area" title='<spring:message code="menu.txt.title.info"/>'>
             <ul>
                 <li>
-                    <label class="red"><spring:message code="menu.txt.menuId"/>:</label>
-                    <input type="text" name="menuId" id="menuId" value="${menu.menuId}"  validate="{required:true,notspecificsymbol:true<c:if test="${empty menu}"> ,remote:'menu/validateId',messages:{remote:'菜单编号必须唯一'}</c:if>}" <c:if test="${not empty menu}"> readonly="readonly" class="readonly"</c:if>  />
+                    <label class="red"><spring:message code="menu.txt.menuid"/>:</label>
+                    <input type="text" name="menuId" id="menuId" value="${menu.menuId}"  validate="{required:true,notspecificsymbol:true<c:if test="${empty menu}"> ,remote:'menu/validatePk',messages:{remote:'菜单编号必须唯一'}</c:if>}" <c:if test="${not empty menu}"> readonly="readonly" class="readonly"</c:if>  />
                 </li>
 
                 <li>
-                    <label class="red"><spring:message code="menu.txt.menuName"/>:</label>
+                    <label class="red"><spring:message code="menu.txt.menuname"/>:</label>
                     <input type="text" name="name" id="name" value="${menu.name}" validate="{required:true,rangelength:[1,50]}" />
                 </li>
 
                 <li>
-                    <label class="red"><spring:message code="menu.txt.url"/>:</label>
-                    <input type="text" name="url" id="url" value="${menu.url}" validate="{required:true}"/>
+                    <label class="red"><spring:message code="menu.txt.href"/>:</label>
+                    <input type="text" name="href" id="href" value="${menu.href}" validate="{required:true}"/>
                 </li>
                 <li>
-                    <label><spring:message code="menu.txt.parentId"/>:</label>
-                    <input type="text" name="parentId" id="parentId" value="${menu.parentId}"  />
+                    <label><spring:message code="menu.txt.parent"/>:</label>
+                    <input type="hidden" id="hiddenParentId" value="${menu.parentId }"/>
+                    <select name="parentId" id="parentId">
+                    	<option value="">---请选择---</option>
+	                    <c:forEach items="${menus }" var="item">
+	                    	<c:choose>
+	                    		<c:when test="${item.menuId eq menu.parentId}">
+			                    	<option value="${item.menuId }" selected="selected">${item.name }</option>
+	                    		</c:when>
+	                    		<c:otherwise>
+			                    	<option value="${item.menuId }">${item.name }</option>
+	                    		</c:otherwise>
+	                    	</c:choose>
+	                    </c:forEach>
+                    </select>
                 </li>
-
-
 
                 <li>
                     <label><spring:message code="menu.txt.visible"/>:</label>
@@ -45,19 +56,6 @@
                 </li>
             </ul>
         </div>
-    </div>
-    <div class="formBar">
-        <ul>
-            <c:choose>
-                <c:when test="${not empty hideBtnSave }">
-                    <li><a href="menu/index" data-rel="ajax" class="btn btn-primary" > <spring:message code="common.btn.cancel"/> </a></li>
-                </c:when>
-                <c:otherwise>
-                    <li><button class="btn btn-primary" type="submit"><spring:message code="common.btn.save"/></button></li>
-                    <li><a href="menu/index" data-rel="ajax" class="btn" > <spring:message code="common.btn.cancel"/> </a></li>
-                </c:otherwise>
-            </c:choose>
-        </ul>
     </div>
 </form>
 

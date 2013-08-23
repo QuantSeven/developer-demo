@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<!-- namespace必须指向Dao接口 -->
 <mapper namespace="com.pousheng.demo.dao.user.UserDao">
 	<resultMap id="UserResultMap" type="com.pousheng.demo.model.user.User">
 		<id property="userId" column="USER_ID" />
@@ -17,14 +16,24 @@
 	<sql id="base_column">
 		USER_ID,USER_NAME,PASSWORD,EMAIL,PHONE,ADDRESS,STATUS,DESCRIPTION
 	</sql>
-
-	<select id="findByPK" resultMap="UserResultMap" parameterType="String">
+	<sql id="where_column">
+		<if test="email != null and email != ''">
+				EMAIL LIKE CONCAT('%',#{email},'%')
+		</if>
+		<if test="username != null and username != ''">
+			AND USER_NAME LIKE CONCAT('%',#{userName},'%')
+		</if>
+	</sql>
+	<select id="findByPk" resultMap="UserResultMap" parameterType="String">
 		SELECT
 		<include refid="base_column" />
 		FROM T_USER WHERE USER_ID=#{userId,jdbcType=VARCHAR}
 	</select>
 	<select id="count"  resultType="java.lang.Integer">
 		SELECT COUNT(0) FROM T_USER 
+		<where>
+			<include refid="where_column"/>
+		</where>
 	</select>
 	<select id="read"  resultMap="UserResultMap">
 		SELECT <include refid="base_column" /> FROM T_USER 
@@ -35,20 +44,15 @@
 		<include refid="base_column" />
 		FROM T_USER 
 		<where>
-			<if test="parameter.email != null and parameter.email != ''">
-				EMAIL LIKE CONCAT('%',#{parameter.email},'%')
-			</if>
-			<if test="parameter.userName != null and parameter.userName != ''">
-				AND USER_NAME LIKE CONCAT('%',#{parameter.userName},'%')
-			</if>
+			<include refid="where_column"/>
 		</where>
-		<if test="parameter.orderBy != null and parameter.orderBy != ''">
-			order By ${parameter.orderBy} ${parameter.order}
-		</if>
-		limit #{parameter.pageNo},#{parameter.pageSize} 
-	</select>
+	</select>  
 	
-	<delete id="deleteByPk" parameterType="String">
+	<delete id="deleteByPk" parameterType="String"> 
 		DELETE FROM T_USER WHERE USER_ID = #{userId,jdbcType=VARCHAR}
 	</delete>
+	
+	<update id="update" parameterType="com.pousheng.demo.model.user.User" >
+		update T_USER set EMAIL=#{email} WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+	</update>
 </mapper> 

@@ -14,8 +14,8 @@ public class Menu implements PersistentModel {
 	private String name;
 	@Column(name = "PARENT_ID")
 	private String parentId;
-	@Column(name = "URL")
-	private String url;
+	@Column(name = "HREF")
+	private String href;
 	@Column(name = "ICON")
 	private String icon;
 	@Column(name = "ICON_CLASS")
@@ -55,12 +55,12 @@ public class Menu implements PersistentModel {
 		this.parentId = parentId;
 	}
 
-	public String getUrl() {
-		return url;
+	public String getHref() {
+		return href;
 	}
 
-	public void setUrl(String url) {
-		this.url = url;
+	public void setHref(String href) {
+		this.href = href;
 	}
 
 	public String getIcon() {
@@ -118,5 +118,4 @@ public class Menu implements PersistentModel {
 	public void setLever(Integer lever) {
 		this.lever = lever;
 	}
-
 }

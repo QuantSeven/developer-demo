@@ -10,47 +10,90 @@
 common.select = function(options, callback) {
 	var that = this;
 	var settings = {
-		singleSelect : true,
-		pageUrl : "common/userIndex",
-		param : {},
+		pageUrl : "common/selectIndex",
+		requestParam : {},
 		title : txt.selectuser,
 		width : 590,
 		height : 480,
-		dataUrl : '',
-		pagination :true
+		dataGridSettings:{
+			dataUrl:'',
+			singleSelect : true,
+			pagination :true,
+			queryParams: {}
+		},
+		treeSettings : {
+			treeDataUrl : '',
+			name :'',
+			idKey: '',
+			pIdKey:''
+		}
 	};
-	$.extend(settings, options);
+	$.extend(true, settings, options); //true深度拷贝
 	var model = $.modal({
 		title : settings.title,
 		remote : settings.pageUrl,
-		requestParam : settings.param,
+		requestParam : settings.requestParam,
 		width : settings.width,
 		height : settings.height,
 		resizable : false,
 		newwinBtn : false,
 		ready : function(et, cxt) {
-			var grid = $(cxt).find("#commonDataGridList").datagrid({
-				singleSelect : settings.singleSelect,
-				url : settings.dataUrl
+			var grid = null,commonTree = null;
+			$(cxt).find(".widget-box").livequery(function(){
+				var height = $(".modal-body div:first-child").height()-40;
+				$(cxt).find(".widget-content").height(height);
+				$(cxt).find(".widget-content").triggerHandler("_resize"); 
 			});
-			if (settings.singleSelect) {
-				$(cxt).find("#checkbox").remove();
-				grid.datagrid("option", "onDblClickRow", function(index, data) {
-					$.isFunction(callback) && callback.call(that, data);
-					$(cxt).modal("close");
+			$(cxt).find(".changeView").on("click",".viewType",function(){
+				if($(this).hasClass("list_style_a_on") || $(this).hasClass("list_style_b_on")){
+					return false;
+				}
+				if($(this).hasClass("list_style_a")){
+					$(this).addClass("list_style_a_on");
+					$(this).siblings().removeClass("list_style_b_on");
+				} else if($(this).hasClass("list_style_b")) {
+					$(this).addClass("list_style_b_on");
+					$(this).siblings().removeClass("list_style_a_on");
+				}
+				$(cxt).find(".widget-content").slideToggle();
+			});
+			//如果有dataGrid设置
+			if(settings.dataGridSettings && settings.dataGridSettings.dataUrl){
+				grid = $(cxt).find("#commonDataGridList").datagrid({
+					singleSelect : settings.dataGridSettings.singleSelect,
+					url : settings.dataGridSettings.dataUrl,
+					pagination:settings.dataGridSettings.pagination
 				});
+				grid.datagrid("register","searchBtn",function(){
+					 $.extend(this.opts.queryParams, this.opts.search.getFieldValues() || {});
+			         this.refresh(null,this.opts.queryParams);
+				});
+				if (settings.dataGridSettings.singleSelect) {
+					$(cxt).find("#checkbox").remove();
+					grid.datagrid("option", "onDblClickRow", function(index, data) {
+						$.isFunction(callback) && callback.call(that, data);
+						$(cxt).modal("close");
+					});
+				}
+			} else {
+				$(cxt).find("#dataGridContent").remove(); 
+				$(cxt).find("#treeContent").show();
+				$(cxt).find("#treeView").addClass("list_style_a_on");
+				$(cxt).find("#gridView").remove(); 
 			}
 			//如果有树形的结构
-			if(settings.treeSettings){
+			if(settings.treeSettings && settings.treeSettings.treeDataUrl){
 				var settingTree = {
 					data : {
 						key : {name : settings.treeSettings.name},
-						simpleData : {enable : true,idKey : settings.treeSettings.idKey,pIdKey : settings.treeSettings.pIdKey}
+						simpleData : {enable : true, idKey : settings.treeSettings.idKey, pIdKey : settings.treeSettings.pIdKey}
 					},
 					view: {fontCss: getFontCss},
 					callback : {
-						//onClick : showUserListAndPosition,
-						//onDblClick: viewInfo
+						onDblClick: function(event, treeId, treeNode){
+							$.isFunction(callback) && callback.call(that, treeNode);
+							$(cxt).modal("close");
+						}
 					}
 				};
 				var initAllTree = function() {
@@ -63,6 +106,16 @@ common.select = function(options, callback) {
 					});
 				};
 				initAllTree();// 第一次加载调用
+				/***********************以下是查询树节点数据的具体步骤 common.js 中公共的方法*************/
+			 	$(cxt).find("#keyword").on("keyup",function(){
+			 		searchNode(settings.treeSettings.name, $(this), commonTree);
+			 	}).on("blur",function(){
+			 		blurKey();
+			 	});
+			 	/*********************************** 是查询树节点数据 end**************************************/
+			} else {
+				$(cxt).find("#treeContent").remove(); 
+				$(cxt).find("#treeView").remove(); 
 			}
 		},
 		buttons : [ {
@@ -97,28 +150,27 @@ common.select = function(options, callback) {
 /**
  * **************以下是查询树节点数据的具体步骤 参照zTree官网的方法******************
  */
-var key = null, currentOrgTree = null, nodeList = [];
+var key = null, currentTree = null, nodeList = [];
 
 /**
  * 查询节点方法
  * 
  * @param inputField
  *            文本框控件
- * @param orgTree
- *            当前的组织架构树的id
+ * @param tree
+ *            当前的树的id
  */
-function searchNode(inputField, orgTree) {
+function searchNode(fileName, inputField, tree) {
 	key = inputField;
-	currentOrgTree = orgTree;
+	currentTree = tree;
 	var value = $.trim(key.get(0).value);
 	if (value === "") {
 		setHighLight(false);
 		setExpandNode(false);
 		return;
 	}
-	;
 	setHighLight(false);
-	nodeList = currentOrgTree.getNodesByParamFuzzy("orgName", value);// 根据组织名称查询
+	nodeList = currentTree.getNodesByParamFuzzy(fileName, value);// 根据组织名称查询
 	setHighLight(true);
 	setExpandNode(true);
 
@@ -133,9 +185,9 @@ function searchNode(inputField, orgTree) {
 function setExpandNode(isExpand) {
 	for ( var i = 0; i < nodeList.length; i++) {
 		if (isExpand) {
-			currentOrgTree.expandNode(nodeList[i].getParentNode(), true, false, false);
+			currentTree.expandNode(nodeList[i].getParentNode(), true, false, false);
 		} else {
-			currentOrgTree.expandNode(nodeList[i].getParentNode(), false, false, false);
+			currentTree.expandNode(nodeList[i].getParentNode(), false, false, false);
 		}
 	}
 }
@@ -148,7 +200,7 @@ function setExpandNode(isExpand) {
 function setHighLight(highlight) {
 	for ( var i = 0; i < nodeList.length; i++) {
 		nodeList[i].highlight = highlight;
-		currentOrgTree.updateNode(nodeList[i]);
+		currentTree.updateNode(nodeList[i]);
 	}
 }
 
@@ -158,16 +210,18 @@ function setHighLight(highlight) {
  * @param e
  *            事件
  */
-function blurKey(e) { //
-	if (key.get(0).value === "") {
-		setHighLight(false);
+function blurKey(e) { 
+	if(key){
+		if (key.get(0).value === "") {
+			setHighLight(false);
+		}
 	}
 }
 /**
  * 为查询的字符着色
  * 
  * @param treeId
- *            当前的组织架构树的id
+ *            当前的树的id
  * @param treeNode
  *            树节点
  * @returns {String} 高亮显示的颜色，字体大小等...

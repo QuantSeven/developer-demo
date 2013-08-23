@@ -8,7 +8,7 @@
 			<ul>
 				<li>
 					<label class="red"><spring:message code="user.txt.userid"/>:</label>
-					<input type="text" name="userId" id="userId" value="${user.userId}"  validate="{required:true,notspecificsymbol:true<c:if test="${empty user}"> ,remote:'user/validateId',messages:{remote:'用户编号必须唯一'}</c:if>}" <c:if test="${not empty user}"> readonly="readonly" class="readonly"</c:if>  />
+					<input type="text" name="userId" id="userId" value="${user.userId}"  validate="{required:true,notspecificsymbol:true<c:if test="${empty user}"> ,remote:'user/validatePk',messages:{remote:'用户编号必须唯一'}</c:if>}" <c:if test="${not empty user}"> readonly="readonly" class="readonly"</c:if>  />
 				</li>
 				<%-- 
 				<li>

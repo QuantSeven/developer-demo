@@ -1,5 +1,4 @@
 $("document").readyfn(function() {
-	var userItem = null;
 	var userListGrid = $("#userListGrid").datagrid();
 	userListGrid.datagrid("option", "onDblClickRow", function(index, item) {
 		$("#indexTab").navTab("load", "user/view", {
@@ -31,6 +30,7 @@ $("document").readyfn(function() {
 			title : '邮箱',
 			field : 'email',
 			sortName:'EMAIL',
+			search : true,
 			width:150
 		} ,{
 			field : 'phone',
@@ -38,10 +38,10 @@ $("document").readyfn(function() {
 			width:200
 		}];
 		common.select({
-			param : {columnJson : JSON.stringify(columns)},
-			dataUrl : 'common/userData',
-			treeSettings:{treeDataUrl:'user/userList',idKey:'userId',pIdKey:'0',name:'userName'},
-			dataGridSettings : {dataUrl:'common/userData'},
+			requestParam : {columnJson : JSON.stringify(columns)},
+			//treeSettings:{treeDataUrl:'user/userList',idKey:'userId',pIdKey:'userId',name:'userName'},
+			treeSettings:{treeDataUrl:'menu/menuList',idKey:'menuId',pIdKey:'parentId',name:'name'},
+			dataGridSettings : {dataUrl:'user/dataGrid'},
 			width:900
 		}, function(data) {
 			console.info(data);

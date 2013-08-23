@@ -3,7 +3,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <style>
 <!--
-
 .widget-box {
     border-radius: 4px 4px 4px 4px;
     margin-top: 0;
@@ -32,10 +31,12 @@
 .nopadding {
     padding: 0 !important;
 }
-.search_ab{
-	text-align: right
+.changeView{
+	float:right;
+	text-align: right;
+	margin-left: 7px;
 }
-.search_ab a {
+.changeView a {
     background: url("themes/img/list-style.png") no-repeat scroll 5px 5px transparent;
     border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
     border-radius: 4px 4px 4px 4px;
@@ -44,38 +45,28 @@
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
     display: inline-block;
     height: 24px !important;
-    margin: 5px 2px 0 -3px;
+    margin: 2px 2px 0 -3px;
     width: 24px !important;
 }
 
+
 a.list_style_b{ background-position:-95px 5px;}
-.search_ab a:hover{ background-color:#e6e6e6;}
+.changeView a:hover{ background-color:#e6e6e6;}
 a.list_style_a:hover, a.list_style_a_on{ background-position:5px -95px!important;}
 a.list_style_b:hover, a.list_style_b_on{ background-position:-95px -95px!important;}
 
+
 -->
 </style>
-<script type="text/javascript">
-<!--
-	$(".widget-box").livequery(function(){
-		var height = $(".modal-body div:first-child").height()-40;
-		$(this).find(".widget-content").height(height);
-		$(this).find(".widget-content").triggerHandler("_resize"); 
-	});
-	$(".viewType").on("click",function(){
-		$(".widget-content").slideToggle();
-	});
-//-->
-</script>
 <div class="widget-box">
-	<div class="widget-title">
-		<div class="search_ab">
-			<a class="viewType list_style_a list_style_a_on" href="javascript:void(0);"></a>
-			<a class="viewType list_style_b" href="javascript:void(0);"></a>
+	<div class="datagrid-toolbar" >
+		<div class="changeView">
+			<a class="viewType list_style_b list_style_b_on" href="javascript:void(0);" id="gridView"></a>
+			<a class="viewType list_style_a" href="javascript:void(0);" id="treeView"></a>
 		</div>
 	</div>
-	<div class="widget-content nopadding">
-			<div id="commonDataGridList" data-datagrid="datagrid" >
+	<div class="widget-content nopadding" id="dataGridContent">
+		<div id="commonDataGridList" data-datagrid="datagrid" >
 			<div class="datagrid-search">
 				<c:if test="${not empty columns }">
 				   <form class="form-search" >
@@ -88,9 +79,9 @@ a.list_style_b:hover, a.list_style_b_on{ background-position:-95px -95px!importa
 						   			</li>
 				   				</c:if>
 				   			</c:forEach>
-							<li>
-								<a class="btn" name="search" data-rel='btn' style="line-height:16px;"> <i class="icon-search"></i><spring:message code="common.btn.search"></spring:message></a>
-							</li>
+				   			<li style="width:65px">
+								<a class="btn" name="search" style="line-height: 17px"  data-rel='btn' ><i class="icon-search"></i><spring:message code="common.btn.search"/></a>
+				   			</li>
 				   		</ul>
 					</form>
 				</c:if>
@@ -102,7 +93,7 @@ a.list_style_b:hover, a.list_style_b_on{ background-position:-95px -95px!importa
 						<c:forEach items="${columns }" var="column">
 							<c:choose>
 								<c:when test="${column.checkbox }">
-									<th width="13"><input type="checkbox" class="datagrid-header-check"/></th>
+									<th width="13"><input type="checkbox" class="datagrid-header-check" id="checkbox"/></th>
 								</c:when>
 								<c:otherwise>
 									<th  width="${column.width }" <c:if test="${not empty column.style }"> style="${column.style}"</c:if> <c:if test="${not empty column.sortName }">class="sort-header" data-code="${column.sortName }"</c:if>>
@@ -131,7 +122,17 @@ a.list_style_b:hover, a.list_style_b_on{ background-position:-95px -95px!importa
 			</table>
 		</div>
 	</div>
-	<div class="widget-content nopadding" style="display: none">
+	<div class="widget-content nopadding" style="display: none" id="treeContent">
+		<div class="datagrid-search">
+		   <form class="form-search" onkeydown="if(event.keyCode==13){return false;}" >
+			   	<ul>
+			   		<li>
+						<label>节点名称：</label>
+						<input  type="text" class="search-query" placeholder="节点名称"  id="keyword" />
+					</li>
+			   	</ul>
+			</form>
+		</div>
 		<ul id="commonTree" class="ztree"></ul>
 	</div>
 </div>

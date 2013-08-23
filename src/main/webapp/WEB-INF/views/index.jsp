@@ -83,9 +83,9 @@
                 		<ul class="menu-nav">
                     		{{for children}}
 	                  			<li> 
-                         			<a href="{{:url}}" type="menu" title="{{:name}}">
+                         			<a href="{{:href}}" type="menu" title="{{:name}}">
 										<i class="menu2 {{:iconClass}}"></i>{{:name}}
-									</a>
+									</a>     
 								</li>
                     		{{/for}}
                 		</ul>

@@ -6,7 +6,7 @@
 </script> 
 
 
-<div id="userListGrid" data-datagrid="datagrid" url="user/listData">
+<div id="userListGrid" data-datagrid="datagrid" url="user/dataGrid">
 	<div class="datagrid-toolbar">
 		<div class="btn-group toolButton">
 			<a class="btn" name="add" href="user/addForm" data-rel='btn' >
@@ -34,11 +34,11 @@
 		   	<ul>
 		   		<li>
 					<label ><spring:message code="user.txt.username" />：</label>
-					<input type="text" placeholder='<spring:message code="user.txt.username" />' name="sch_username" /></li>
+					<input type="text" placeholder='<spring:message code="user.txt.username" />' name="filter_username" /></li>
 				</li>
 				<li >
 					<label ><spring:message code="user.txt.email" />：</label>
-					<input type="text" placeholder='<spring:message code="user.txt.email" />' name="sch_email" /> 
+					<input type="text" placeholder='<spring:message code="user.txt.email" />' name="filter_email" /> 
 		   		</li>
 		   	</ul>
 		</form>
